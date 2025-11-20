@@ -37,7 +37,7 @@ jobs:
       - name: Build wheels
         uses: pypa/cibuildwheel@v2.16.5
         env:
-          CIBW_SKIP: "pp*"
+          CIBW_SKIP: "pp* *-musllinux*"
           CIBW_ARCHS_LINUX: "x86_64 i686"
           # Fix CentOS 7 EOL mirrors then install deps
           CIBW_BEFORE_ALL_LINUX: "sed -i 's|^mirrorlist=|#mirrorlist=|g' /etc/yum.repos.d/CentOS-* && sed -i 's|^#baseurl=http://mirror.centos.org|baseurl=http://vault.centos.org|g' /etc/yum.repos.d/CentOS-* && yum install -y cairo-devel pango-devel pkgconfig || (apt-get update && apt-get install -y libcairo2-dev libpango1.0-dev pkg-config)"
