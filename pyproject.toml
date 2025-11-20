@@ -1,0 +1,25 @@
+[project]
+name = "emoji-img"
+authors = [
+    { name = "GrandpaEJ", email = "grandpaej@grandpaacademy.org" }
+]
+
+version = "0.1.0"
+license = "MIT"
+description = "Add text to images using emojis"
+readme = "README.md"
+requires-python = ">=3.12"
+dependencies = []
+
+[project.optional-dependencies]
+dev = [
+    "pytest>=8.3.3",
+    "imgrs>=0.2.10"
+]
+
+[build-system]
+requires = ["setuptools", "wheel"]
+build-backend = "setuptools.build_meta"
+
+[tool.setuptools]
+packages = ["pyemoji2"]
