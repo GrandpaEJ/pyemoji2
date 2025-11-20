@@ -13,8 +13,15 @@ A high-performance Python library for rendering text and emojis onto images. Bui
 
 ## Installation
 
-### Prerequisites
-You need `cairo` and `pango` installed on your system.
+### From PyPI (Recommended - Zero Dependencies!)
+```bash
+pip install pyemoji2
+```
+
+That's it! No system libraries needed. Everything is bundled in the wheel.
+
+### From Source (For Development)
+If building from source, you need:
 
 **Ubuntu/Debian:**
 ```bash
