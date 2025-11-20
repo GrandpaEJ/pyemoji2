@@ -39,8 +39,12 @@ jobs:
         env:
           CIBW_SKIP: "pp*"
           CIBW_ARCHS_LINUX: "auto aarch64"
-          # Install deps - fixed package names
-          CIBW_BEFORE_ALL_LINUX: "yum install -y cairo-devel pango-devel pkg-config || apt-get update && apt-get install -y libcairo2-dev libpango1.0-dev pkg-config"
+          # Fix CentOS 7 mirrors (EOL) then install deps
+          CIBW_BEFORE_ALL_LINUX: >
+            (sed -i 's|^mirrorlist=|#mirrorlist=|g' /etc/yum.repos.d/CentOS-* &&
+            sed -i 's|^#baseurl=http://mirror.centos.org|baseurl=http://vault.centos.org|g' /etc/yum.repos.d/CentOS-* &&
+            yum install -y cairo-devel pango-devel pkg-config) ||
+            (apt-get update && apt-get install -y libcairo2-dev libpango1.0-dev pkg-config)
           # Bundle all libraries into wheel (zero system dependencies!)
           CIBW_REPAIR_WHEEL_COMMAND_LINUX: "auditwheel repair -w {dest_dir} {wheel}"
           CIBW_REPAIR_WHEEL_COMMAND_MACOS: "delocate-wheel --require-archs {delocate_archs} -w {dest_dir} -v {wheel}"
