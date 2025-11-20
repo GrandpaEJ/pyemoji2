@@ -10,9 +10,9 @@ A high-performance Python library for rendering text and emojis onto images. Bui
 - 🚀 **Native Speed** - Written in C, wrapped in Python
 - 🎨 **Rich Text** - Supports all system fonts and emojis
 - 🖼️ **Direct Memory Access** - No Pillow required
-- 📦 **Cross-Platform** - Linux (x86_64, aarch64), macOS (x86_64, arm64), Windows (x64)
+- 📦 **Cross-Platform** - Linux (x86_64, i686), macOS (x86_64, arm64)
 - 📱 **Android/Termux** - Build from source support
-- 🔥 **Lightweight** - ~5-10MB wheels with all dependencies included
+- 🔥 **Lightweight** - ~5-8MB wheels with all dependencies included
 
 ## 🚀 Installation
 
@@ -45,6 +45,19 @@ Then install:
 ```bash
 pip install .
 ```
+
+## 🖥️ Platform Support
+
+### Supported Platforms (Pre-built Wheels)
+- ✅ **Linux** - x86_64, i686 (manylinux2014)
+- ✅ **macOS** - x86_64 (Intel), arm64 (Apple Silicon)
+
+### Build from Source
+- ✅ **Android/Termux** - Full support with source build
+- ⚠️ **Windows** - Not currently supported (Cairo/Pango dependency issues)
+- ⚠️ **Linux ARM64** - Build from source recommended
+
+For unsupported platforms, you can build from source following the instructions above.
 
 ## 📖 Usage
 
