@@ -1,5 +1,5 @@
 [project]
-name = "emoji-img"
+name = "pyemoji2"
 authors = [
     { name = "GrandpaEJ", email = "grandpaej@grandpaacademy.org" }
 ]

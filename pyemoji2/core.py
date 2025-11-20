@@ -62,10 +62,36 @@ class EmojiEditor:
             ctypes.c_char_p
         ]
         
+        # Advanced text functions
+        self._lib.emoji_img_add_text_outlined.argtypes = [
+            ctypes.POINTER(EmojiImageManipulator), ctypes.c_char_p,
+            ctypes.c_double, ctypes.c_double, ctypes.c_char_p, ctypes.c_double,
+            ctypes.c_char_p, ctypes.c_char_p, ctypes.c_double
+        ]
+        
+        self._lib.emoji_img_add_text_gradient.argtypes = [
+            ctypes.POINTER(EmojiImageManipulator), ctypes.c_char_p,
+            ctypes.c_double, ctypes.c_double, ctypes.c_char_p, ctypes.c_double,
+            ctypes.c_char_p, ctypes.c_char_p, ctypes.c_int
+        ]
+        
+        self._lib.emoji_img_add_text_shadow.argtypes = [
+            ctypes.POINTER(EmojiImageManipulator), ctypes.c_char_p,
+            ctypes.c_double, ctypes.c_double, ctypes.c_char_p, ctypes.c_double,
+            ctypes.c_char_p, ctypes.c_double, ctypes.c_double, ctypes.c_char_p, ctypes.c_double
+        ]
+        
+        self._lib.emoji_img_add_textbox.argtypes = [
+            ctypes.POINTER(EmojiImageManipulator), ctypes.c_char_p,
+            ctypes.c_double, ctypes.c_double, ctypes.c_char_p, ctypes.c_double,
+            ctypes.c_char_p, ctypes.c_char_p, ctypes.c_double, ctypes.c_char_p, ctypes.c_double
+        ]
+        
         self._lib.emoji_img_save.argtypes = [ctypes.POINTER(EmojiImageManipulator), ctypes.c_char_p]
         self._lib.emoji_img_destroy.argtypes = [ctypes.POINTER(EmojiImageManipulator)]
 
     def add_text(self, text, x, y, font_family="Sans", font_size=20.0, color="black"):
+        """Add simple text (backward compatible)."""
         self._lib.emoji_img_add_text(
             self._manip,
             text.encode('utf-8'),
@@ -74,9 +100,77 @@ class EmojiEditor:
             font_size,
             color.encode('utf-8')
         )
+        return self  # Chainable
+    
+    def add(self, text_obj, position):
+        """Add Text or TextBox object (new API)."""
+        from .text import Text, TextBox
+        
+        x, y = position
+        
+        if isinstance(text_obj, TextBox):
+            # Render as textbox
+            self._lib.emoji_img_add_textbox(
+                self._manip,
+                text_obj.text.encode('utf-8'),
+                x, y,
+                text_obj.font.encode('utf-8'),
+                text_obj.size,
+                text_obj.color.encode('utf-8'),
+                (text_obj.background or "white").encode('utf-8'),
+                text_obj.padding,
+                (text_obj.border_color or "black").encode('utf-8'),
+                text_obj.border_width
+            )
+        elif text_obj.gradient_colors:
+            # Render with gradient
+            c1, c2 = text_obj.gradient_colors
+            self._lib.emoji_img_add_text_gradient(
+                self._manip,
+                text_obj.text.encode('utf-8'),
+                x, y,
+                text_obj.font.encode('utf-8'),
+                text_obj.size,
+                c1.encode('utf-8'),
+                c2.encode('utf-8'),
+                1 if text_obj.gradient_vertical else 0
+            )
+        elif text_obj.shadow_offset:
+            # Render with shadow
+            sx, sy = text_obj.shadow_offset
+            self._lib.emoji_img_add_text_shadow(
+                self._manip,
+                text_obj.text.encode('utf-8'),
+                x, y,
+                text_obj.font.encode('utf-8'),
+                text_obj.size,
+                text_obj.color.encode('utf-8'),
+                sx, sy,
+                text_obj.shadow_color.encode('utf-8'),
+                text_obj.shadow_opacity
+            )
+        elif text_obj.outline_color:
+            # Render with outline
+            self._lib.emoji_img_add_text_outlined(
+                self._manip,
+                text_obj.text.encode('utf-8'),
+                x, y,
+                text_obj.font.encode('utf-8'),
+                text_obj.size,
+                text_obj.color.encode('utf-8'),
+                text_obj.outline_color.encode('utf-8'),
+                text_obj.outline_width
+            )
+        else:
+            # Simple text
+            self.add_text(text_obj.text, x, y, text_obj.font, text_obj.size, text_obj.color)
+        
+        return self  # Chainable
 
     def save(self, output_path):
+        """Save image to file."""
         self._lib.emoji_img_save(self._manip, output_path.encode('utf-8'))
+        return self  # Chainable
 
     def __del__(self):
         if self._manip:
@@ -84,6 +178,6 @@ class EmojiEditor:
 
     @classmethod
     def create_empty(cls, width, height):
+        """Create empty image."""
         return cls(empty_size=(width, height))
-
 
