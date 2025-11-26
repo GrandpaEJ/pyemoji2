@@ -4,13 +4,17 @@ All notable changes to this project will be documented in this file.
 
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/).
 
+## [0.1.1] - 2025-11-26
+
+### Fixed
+- Segmentation fault in PyPI wheels by building Cairo/Pango without OpenGL/X11 dependencies
+
 ## [Unreleased]
 
 ### Fixed
 - CentOS 7 EOL mirror issues by switching to vault.centos.org
 - Package installation commands in CI workflows
 - Windows build configuration with delvewheel
-- Segmentation fault in PyPI wheels by building Cairo/Pango without OpenGL/X11 dependencies
 
 ### Changed
 - Improved README with comprehensive examples and API reference
