@@ -10,7 +10,7 @@ A high-performance Python library for rendering text and emojis onto images. Bui
 - 🚀 **Native Speed** - Written in C, wrapped in Python
 - 🎨 **Rich Text** - Supports all system fonts and emojis
 - 🖼️ **Direct Memory Access** - No Pillow required
-- 📦 **Cross-Platform** - Linux (x86_64, i686), macOS (x86_64, arm64)
+- 📦 **Cross-Platform** - Linux (x86_64, i686), macOS (x86_64, arm64), Windows (x86_64)
 - 📱 **Android/Termux** - Build from source support
 - 🔥 **Lightweight** - ~5-8MB wheels with all dependencies included
 
@@ -41,6 +41,11 @@ brew install cairo pango pkg-config
 pkg install python clang make pkg-config libcairo pango
 ```
 
+**Windows (MSYS2):**
+```bash
+pacman -S mingw-w64-x86_64-python mingw-w64-x86_64-gcc mingw-w64-x86_64-pkg-config mingw-w64-x86_64-cairo mingw-w64-x86_64-pango
+```
+
 Then install:
 ```bash
 pip install .
@@ -51,10 +56,10 @@ pip install .
 ### Supported Platforms (Pre-built Wheels)
 - ✅ **Linux** - x86_64, i686 (manylinux2014)
 - ✅ **macOS** - x86_64 (Intel), arm64 (Apple Silicon)
+- ✅ **Windows** - x86_64 (via MSYS2 builds)
 
 ### Build from Source
 - ✅ **Android/Termux** - Full support with source build
-- ⚠️ **Windows** - Not currently supported (Cairo/Pango dependency issues)
 - ⚠️ **Linux ARM64** - Build from source recommended
 
 For unsupported platforms, you can build from source following the instructions above.
