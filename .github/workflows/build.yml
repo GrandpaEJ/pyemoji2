@@ -67,21 +67,20 @@ jobs:
             )
           # Build headless Cairo/Pango on Windows from source
           CIBW_BEFORE_ALL_WINDOWS: |
-            # Install build tools
-            pacman -S --noconfirm --needed mingw-w64-x86_64-gcc mingw-w64-x86_64-pkg-config wget tar xz make
-            # Download and build Cairo
-            wget https://cairographics.org/releases/cairo-1.18.0.tar.xz
-            tar xf cairo-1.18.0.tar.xz
+            pacman -S --noconfirm --needed mingw-w64-x86_64-gcc mingw-w64-x86_64-pkg-config curl tar make
+            curl -L https://cairographics.org/releases/cairo-1.18.0.tar.xz -o cairo.tar.xz
+            tar xf cairo.tar.xz
             cd cairo-1.18.0
-            ./configure --prefix=/usr/local --disable-xlib --disable-gl --disable-xcb --enable-png=yes --enable-ft=yes --host=x86_64-w64-mingw32
-            make -j$(nproc) && make install
+            ./configure --prefix=/usr/local --disable-xlib --disable-gl --disable-xcb --enable-png=yes --enable-ft=yes
+            make -j2
+            make install
             cd ..
-            # Download and build Pango
-            wget https://download.gnome.org/sources/pango/1.50/pango-1.50.14.tar.xz
-            tar xf pango-1.50.14.tar.xz
+            curl -L https://download.gnome.org/sources/pango/1.50/pango-1.50.14.tar.xz -o pango.tar.xz
+            tar xf pango.tar.xz
             cd pango-1.50.14
-            ./configure --prefix=/usr/local --without-x --host=x86_64-w64-mingw32
-            make -j$(nproc) && make install
+            ./configure --prefix=/usr/local --without-x
+            make -j2
+            make install
             cd ..
           # Repair wheels to bundle libraries (zero dependencies!)
           CIBW_REPAIR_WHEEL_COMMAND_LINUX: "auditwheel repair -w {dest_dir} {wheel}"
