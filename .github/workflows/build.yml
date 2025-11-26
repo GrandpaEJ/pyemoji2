@@ -52,8 +52,7 @@ jobs:
               cd ..
             )
           # Repair wheels to bundle libraries (zero dependencies!)
-          # Exclude OpenGL/X11 libs that cause crashes in headless environments
-          CIBW_REPAIR_WHEEL_COMMAND_LINUX: "auditwheel repair --exclude-libs libGL.so.1,libGLX.so.0,libGLdispatch.so.0,libEGL.so.1,libX11.so.6,libXext.so.6,libXrender.so.1,libxcb.so.1,libxcb-render.so.0,libxcb-shm.so.0 -w {dest_dir} {wheel}"
+          CIBW_REPAIR_WHEEL_COMMAND_LINUX: "auditwheel repair -w {dest_dir} {wheel}"
           CIBW_REPAIR_WHEEL_COMMAND_MACOS: "delocate-wheel --require-archs {delocate_archs} -w {dest_dir} -v {wheel}"
 
       - uses: actions/upload-artifact@v4
