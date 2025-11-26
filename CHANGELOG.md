@@ -10,6 +10,7 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/).
 - CentOS 7 EOL mirror issues by switching to vault.centos.org
 - Package installation commands in CI workflows
 - Windows build configuration with delvewheel
+- Segmentation fault in PyPI wheels by building Cairo/Pango without OpenGL/X11 dependencies
 
 ### Changed
 - Improved README with comprehensive examples and API reference

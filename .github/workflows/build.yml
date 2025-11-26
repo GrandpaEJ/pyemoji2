@@ -34,10 +34,26 @@ jobs:
         env:
           CIBW_SKIP: "pp* *-musllinux*"
           CIBW_ARCHS_LINUX: "x86_64 i686"
-          # Fix CentOS 7 EOL mirrors then install deps
-          CIBW_BEFORE_ALL_LINUX: "sed -i 's|^mirrorlist=|#mirrorlist=|g' /etc/yum.repos.d/CentOS-* && sed -i 's|^#baseurl=http://mirror.centos.org|baseurl=http://vault.centos.org|g' /etc/yum.repos.d/CentOS-* && yum install -y cairo-devel pango-devel pkgconfig || (apt-get update && apt-get install -y libcairo2-dev libpango1.0-dev pkg-config)"
+          # Fix CentOS 7 EOL mirrors then build headless Cairo/Pango
+          CIBW_BEFORE_ALL_LINUX: |
+            sed -i 's|^mirrorlist=|#mirrorlist=|g' /etc/yum.repos.d/CentOS-* && sed -i 's|^#baseurl=http://mirror.centos.org|baseurl=http://vault.centos.org|g' /etc/yum.repos.d/CentOS-* && yum install -y cairo-devel pango-devel pkgconfig || (
+              apt-get update && apt-get install -y build-essential wget pkg-config libpng-dev libfreetype6-dev libfontconfig1-dev libglib2.0-dev libffi-dev libpcre2-dev zlib1g-dev &&
+              wget https://cairographics.org/releases/cairo-1.18.0.tar.xz &&
+              tar xf cairo-1.18.0.tar.xz &&
+              cd cairo-1.18.0 &&
+              ./configure --prefix=/usr/local --disable-xlib --disable-gl --disable-xcb --enable-png=yes --enable-ft=yes &&
+              make -j$(nproc) && make install &&
+              cd .. &&
+              wget https://download.gnome.org/sources/pango/1.50/pango-1.50.14.tar.xz &&
+              tar xf pango-1.50.14.tar.xz &&
+              cd pango-1.50.14 &&
+              ./configure --prefix=/usr/local --without-x &&
+              make -j$(nproc) && make install &&
+              cd ..
+            )
           # Repair wheels to bundle libraries (zero dependencies!)
-          CIBW_REPAIR_WHEEL_COMMAND_LINUX: "auditwheel repair -w {dest_dir} {wheel}"
+          # Exclude OpenGL/X11 libs that cause crashes in headless environments
+          CIBW_REPAIR_WHEEL_COMMAND_LINUX: "auditwheel repair --exclude-libs libGL.so.1,libGLX.so.0,libGLdispatch.so.0,libEGL.so.1,libX11.so.6,libXext.so.6,libXrender.so.1,libxcb.so.1,libxcb-render.so.0,libxcb-shm.so.0 -w {dest_dir} {wheel}"
           CIBW_REPAIR_WHEEL_COMMAND_MACOS: "delocate-wheel --require-archs {delocate_archs} -w {dest_dir} -v {wheel}"
 
       - uses: actions/upload-artifact@v4
