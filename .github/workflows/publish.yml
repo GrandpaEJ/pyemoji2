@@ -8,7 +8,7 @@ jobs:
     runs-on: ${{ matrix.os }}
     strategy:
       matrix:
-        os: [ubuntu-latest, macos-latest]
+        os: [ubuntu-latest, macos-latest, windows-latest]
 
     steps:
       - uses: actions/checkout@v4
@@ -26,7 +26,28 @@ jobs:
       - name: Install dependencies (macOS)
         if: runner.os == 'macOS'
         run: |
-          brew install cairo pango pkg-config
+          brew install cairo pango pkg-config || (
+            # Fallback: build from source
+            curl -L https://cairographics.org/releases/cairo-1.18.0.tar.xz | tar xJ &&
+            cd cairo-1.18.0 &&
+            ./configure --prefix=/usr/local --disable-xlib --disable-gl --disable-xcb --enable-png=yes --enable-ft=yes &&
+            make -j$(sysctl -n hw.ncpu) && sudo make install &&
+            cd .. &&
+            curl -L https://download.gnome.org/sources/pango/1.50/pango-1.50.14.tar.xz | tar xJ &&
+            cd pango-1.50.14 &&
+            ./configure --prefix=/usr/local --without-x &&
+            make -j$(sysctl -n hw.ncpu) && sudo make install &&
+            cd ..
+          )
+
+      - name: Install dependencies (Windows)
+        if: runner.os == 'Windows'
+        run: |
+          # Try Chocolatey first
+          choco install cairo pango pkgconfig || (
+            # Fallback: build from source (using MSYS2 or similar)
+            echo "Building from source on Windows - may require MSYS2 setup"
+          )
 
       - name: Build wheels
         uses: pypa/cibuildwheel@v2.16.5
@@ -47,6 +68,24 @@ jobs:
               tar xf pango-1.50.14.tar.xz &&
               cd pango-1.50.14 &&
               ./configure --prefix=/usr/local --without-x &&
+              make -j$(nproc) && make install &&
+              cd ..
+            )
+          # Build headless Cairo/Pango on Windows
+          CIBW_BEFORE_ALL_WINDOWS: |
+            # Use MSYS2 pacman to install build deps, then build from source
+            pacman -S --noconfirm --needed mingw-w64-x86_64-gcc mingw-w64-x86_64-pkg-config mingw-w64-x86_64-libpng mingw-w64-x86_64-freetype mingw-w64-x86_64-fontconfig mingw-w64-x86_64-glib2 mingw-w64-x86_64-gettext mingw-w64-x86_64-libffi mingw-w64-x86_64-pcre2 mingw-w64-x86_64-zlib wget tar xz || (
+              # Fallback: download and build
+              wget https://cairographics.org/releases/cairo-1.18.0.tar.xz &&
+              tar xf cairo-1.18.0.tar.xz &&
+              cd cairo-1.18.0 &&
+              ./configure --prefix=/usr/local --disable-xlib --disable-gl --disable-xcb --enable-png=yes --enable-ft=yes --host=x86_64-w64-mingw32 &&
+              make -j$(nproc) && make install &&
+              cd .. &&
+              wget https://download.gnome.org/sources/pango/1.50/pango-1.50.14.tar.xz &&
+              tar xf pango-1.50.14.tar.xz &&
+              cd pango-1.50.14 &&
+              ./configure --prefix=/usr/local --without-x --host=x86_64-w64-mingw32 &&
               make -j$(nproc) && make install &&
               cd ..
             )
