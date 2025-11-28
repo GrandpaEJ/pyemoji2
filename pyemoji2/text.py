@@ -5,7 +5,7 @@ Advanced text classes for pyemoji2 with method chaining support.
 class Text:
     """Text with advanced styling support."""
     
-    def __init__(self, text, font="Sans", size=24):
+    def __init__(self, text, font="DejaVu Sans", size=24):
         self.text = text
         self.font = font
         self.size = size
@@ -48,7 +48,7 @@ class Text:
 class TextBox(Text):
     """Text with background box."""
     
-    def __init__(self, text, font="Sans", size=24):
+    def __init__(self, text, font="DejaVu Sans", size=24):
         super().__init__(text, font, size)
         self.background = None
         self.padding = 10

@@ -21,7 +21,7 @@ else:
 class EmojiImageManipulator(ctypes.Structure):
     pass
 
-class EmojiEditor:
+class Image:
     def __init__(self, image_path=None, image_data=None, empty_size=None):
         self._lib = ctypes.CDLL(str(LIB_PATH))
         self._setup_signatures()
@@ -90,7 +90,7 @@ class EmojiEditor:
         self._lib.emoji_img_save.argtypes = [ctypes.POINTER(EmojiImageManipulator), ctypes.c_char_p]
         self._lib.emoji_img_destroy.argtypes = [ctypes.POINTER(EmojiImageManipulator)]
 
-    def add_text(self, text, x, y, font_family="Sans", font_size=20.0, color="black"):
+    def add_text(self, text, x, y, font_family="DejaVu Sans", font_size=20.0, color="black"):
         """Add simple text (backward compatible)."""
         self._lib.emoji_img_add_text(
             self._manip,
@@ -177,7 +177,78 @@ class EmojiEditor:
             self._lib.emoji_img_destroy(self._manip)
 
     @classmethod
+    def load(cls, path):
+        """Load image from file path."""
+        return cls(image_path=path)
+
+    @classmethod
+    def open(cls, path):
+        """Open image from file path (alias for load)."""
+        return cls.load(path)
+
+    @classmethod
     def create_empty(cls, width, height):
         """Create empty image."""
         return cls(empty_size=(width, height))
+
+    @classmethod
+    def from_pil(cls, pil_image):
+        """Create Image from PIL Image."""
+        # Convert PIL image to raw data
+        if pil_image.mode not in ('RGB', 'RGBA'):
+            pil_image = pil_image.convert('RGBA')
+        data_bytes = pil_image.tobytes()
+        width = pil_image.width
+        height = pil_image.height
+
+        if pil_image.mode == 'RGBA':
+            # Cairo expects BGRA (little-endian ARGB), PIL gives RGBA. Need to swizzle.
+            bgra_data = bytearray(len(data_bytes))
+            for i in range(0, len(data_bytes), 4):
+                r, g, b, a = data_bytes[i:i+4]
+                bgra_data[i:i+4] = [b, g, r, a]
+            data_bytes = bytes(bgra_data)
+            stride = width * 4
+        else:
+            # For RGB, convert to RGBA first
+            pil_image = pil_image.convert('RGBA')
+            data_bytes = pil_image.tobytes()
+            # Swizzle to BGRA
+            bgra_data = bytearray(len(data_bytes))
+            for i in range(0, len(data_bytes), 4):
+                r, g, b, a = data_bytes[i:i+4]
+                bgra_data[i:i+4] = [b, g, r, a]
+            data_bytes = bytes(bgra_data)
+            stride = width * 4
+
+        # Convert to ctypes array
+        data_array = (ctypes.c_ubyte * len(data_bytes)).from_buffer_copy(data_bytes)
+        return cls(image_data=(data_array, width, height, stride))
+
+    @classmethod
+    def from_imgrs(cls, imgrs_image):
+        """Create Image from imgrs Image."""
+        # Assuming imgrs has similar interface
+        data_bytes = imgrs_image.to_bytes()
+        width = imgrs_image.width
+        height = imgrs_image.height
+
+        # Assume RGBA format, need to swizzle to BGRA for Cairo
+        if len(data_bytes) == width * height * 4:  # RGBA
+            bgra_data = bytearray(len(data_bytes))
+            for i in range(0, len(data_bytes), 4):
+                r, g, b, a = data_bytes[i:i+4]
+                bgra_data[i:i+4] = [b, g, r, a]
+            data_bytes = bytes(bgra_data)
+            stride = width * 4
+        else:
+            # If not RGBA, try to get stride
+            if hasattr(imgrs_image, 'stride'):
+                stride = imgrs_image.stride()
+            else:
+                stride = width * 4  # Assume 4 bytes per pixel
+
+        # Convert to ctypes array
+        data_array = (ctypes.c_ubyte * len(data_bytes)).from_buffer_copy(data_bytes)
+        return cls(image_data=(data_array, width, height, stride))
 
