@@ -5,6 +5,7 @@ Comprehensive test for pyemoji2 advanced features.
 
 import sys
 import os
+
 sys.path.insert(0, os.path.dirname(os.getcwd()))
 
 from pyemoji2 import Image, Text, TextBox
@@ -16,7 +17,9 @@ img = Image.create_empty(800, 600)
 img.add_text("Simple Text", 50, 50, "Sans", 24, "black")
 
 # Test 2: Text with outline (method chaining)
-text = Text("Outlined! 🎨", "Sans Bold", 48).with_outline("black", 3).with_color("white")
+text = (
+    Text("Outlined! 🎨", "Sans Bold", 48).with_outline("black", 3).with_color("white")
+)
 img.add(text, (50, 100))
 
 # Test 3: Gradient text
@@ -28,13 +31,15 @@ text = Text("Shadow ✨", "Sans", 40).with_shadow(3, 3, "gray", 0.7)
 img.add(text, (50, 270))
 
 # Test 5: TextBox with background
-box = TextBox("Boxed Text 📦", "Sans", 32).with_background("blue", 15).with_border("white", 3)
+box = (
+    TextBox("Boxed Text 📦", "Sans", 32)
+    .with_background("blue", 15)
+    .with_border("white", 3)
+)
 img.add(box, (50, 350))
 
 # Test 6: Complex chaining
-text = (Text("Chained! ⛓️", "Sans Bold", 36)
-        .with_color("yellow")
-        .with_outline("black", 2))
+text = Text("Chained! ⛓️", "Sans Bold", 36).with_color("yellow").with_outline("black", 2)
 img.add(text, (50, 450))
 
 # Test 7: Emoji support

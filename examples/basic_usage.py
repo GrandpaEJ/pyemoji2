@@ -1,5 +1,6 @@
 import sys
 import os
+
 # from PIL import Image, ImageDraw # Removed Pillow
 
 
@@ -9,23 +10,25 @@ sys.path.insert(0, os.path.dirname(os.getcwd()))
 try:
     import pyemoji2
     import imgrs
+
     print("Imports successful")
 except ImportError as e:
     print(f"Import failed: {e}")
     sys.exit(1)
 
+
 def test_pyemoji2():
     print("Testing pyemoji2...")
-    
+
     # Create a blank image with pyemoji2 (Native Cairo)
     width, height = 400, 200
     editor = pyemoji2.Image.create_empty(width, height)
     editor.add_text("Hello 🌍", 50, 100, font_size=40, color="black")
-    
+
     # Save using C save (for verification)
     editor.save("output_pyemoji2.png")
     print("Saved output_pyemoji2.png")
-    
+
     # Verify with imgrs
     # imgrs usage: imgrs.load(path) -> Image
     # This part depends on what imgrs actually exposes.
@@ -36,6 +39,7 @@ def test_pyemoji2():
         print(f"Loaded with imgrs: {rs_img}")
     except Exception as e:
         print(f"imgrs load failed: {e}")
+
 
 if __name__ == "__main__":
     test_pyemoji2()
