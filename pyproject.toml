@@ -24,8 +24,16 @@ imgrs = [
 ]
 
 [build-system]
-requires = ["setuptools", "wheel"]
+requires = ["setuptools>=61.0", "wheel"]
 build-backend = "setuptools.build_meta"
 
 [tool.setuptools]
 packages = ["pyemoji2"]
+
+[tool.setuptools.packages.find]
+where = ["."]
+
+[[tool.setuptools.ext_modules]]
+name = "pyemoji2._emoji_img"
+sources = ["c/emoji_img.c"]
+include_dirs = ["c/include"]

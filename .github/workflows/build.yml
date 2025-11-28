@@ -9,7 +9,7 @@ jobs:
     runs-on: ${{ matrix.os }}
     strategy:
       matrix:
-        os: [ubuntu-latest, macos-latest, windows-latest]
+        os: [ubuntu-latest, macos-latest]
 
     steps:
       - uses: actions/checkout@v4
@@ -66,18 +66,20 @@ jobs:
             cd ..
           # Build headless Cairo/Pango on Windows from source
           CIBW_BEFORE_ALL_WINDOWS: |
-            pacman -S --noconfirm --needed mingw-w64-x86_64-gcc mingw-w64-x86_64-pkg-config curl tar make
-            curl -L https://cairographics.org/releases/cairo-1.18.0.tar.xz -o cairo.tar.xz
-            tar xf cairo.tar.xz
+            choco install wget --no-progress
+            wget https://cairographics.org/releases/cairo-1.18.0.tar.xz -O cairo.tar.xz
+            7z x cairo.tar.xz
+            7z x cairo.tar
             cd cairo-1.18.0
-            ./configure --prefix=/usr/local --disable-xlib --disable-gl --disable-xcb --enable-png=yes --enable-ft=yes
+            ./configure --prefix=/usr/local --disable-xlib --disable-gl --disable-xcb --enable-png=yes --enable-ft=yes --build=x86_64-pc-mingw64 --host=x86_64-pc-mingw64
             make -j2
             make install
             cd ..
-            curl -L https://download.gnome.org/sources/pango/1.50/pango-1.50.14.tar.xz -o pango.tar.xz
-            tar xf pango.tar.xz
+            wget https://download.gnome.org/sources/pango/1.50/pango-1.50.14.tar.xz -O pango.tar.xz
+            7z x pango.tar.xz
+            7z x pango.tar
             cd pango-1.50.14
-            ./configure --prefix=/usr/local --without-x
+            ./configure --prefix=/usr/local --without-x --build=x86_64-pc-mingw64 --host=x86_64-pc-mingw64
             make -j2
             make install
             cd ..

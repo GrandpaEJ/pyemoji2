@@ -26,7 +26,7 @@
 |:---:|:---:|:---:|
 | ⚡ **Native Speed** - C extension | 🎯 **Zero Dependencies** - Bundled | 🐧 **Linux** x86_64/i686 |
 | 🔥 **Lightweight** - 5-8MB wheels | 🎨 **Rich Text** - All fonts & emojis | 🍎 **macOS** x86_64 |
-| 📈 **Memory Efficient** - Direct access | 🖼️ **Image Formats** - PNG output | 🪟 **Windows** x86_64 |
+| 📈 **Memory Efficient** - Direct access | 🖼️ **Image Formats** - PNG output | 🪟 **Windows** 🚧 Planned |
 | 🔄 **Cross-Platform** - Universal | 📱 **Mobile Ready** - Android/Termux | 🤖 **Android** Build support |
 
 </div>
@@ -78,7 +78,7 @@ pip install -e .
 |----------|---------------|--------|
 | 🐧 **Linux** | x86_64, i686 | ✅ Full Support |
 | 🍎 **macOS** | x86_64 | ✅ Full Support |
-| 🪟 **Windows** | x86_64 | ✅ Full Support |
+| 🪟 **Windows** | x86_64 | 🚧 Planned |
 
 ### 🔧 **Build from Source**
 - 🤖 **Android/Termux** - Full support
