@@ -19,3 +19,6 @@ rust/
 *.gif
 *.so
 *.o
+
+!examples/*
+!examples/**/*

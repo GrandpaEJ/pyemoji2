@@ -63,71 +63,109 @@ pip install .
 
 For unsupported platforms, you can build from source following the instructions above.
 
+## 📖 Documentation
+
+For comprehensive API documentation and examples, see [`docs/README.md`](docs/README.md).
+
 ## 📖 Usage
 
 ### Basic Example
 ```python
-import pyemoji2
+from pyemoji2 import Image
 
-# Create a blank canvas
-editor = pyemoji2.EmojiEditor.create_empty(500, 300)
+# Load an existing image
+img = Image.load("input.png")
+
+# Or create a blank canvas
+img = Image.create_empty(500, 300)
 
 # Add text with emojis
-editor.add_text("Hello World! 🌍", 50, 150, "Sans", 60, "black")
-editor.add_text("Made with ❤️", 150, 250, "Sans", 30, "red")
+img.add_text("Hello World! 🌍", 50, 150, font_size=60, color="black")
+img.add_text("Made with ❤️", 150, 250, font_size=30, color="red")
 
 # Save
-editor.save("output.png")
+img.save("output.png")
 ```
 
 ### Advanced Example
 ```python
-import pyemoji2
+from pyemoji2 import Image, Text, TextBox
 
 # Create image
-editor = pyemoji2.EmojiEditor.create_empty(800, 400)
+img = Image.create_empty(800, 400)
 
-# Title
-editor.add_text("🎉 pyemoji2", 50, 80, "Sans Bold", 72, "black")
+# Title with styling
+title = Text("🎉 pyemoji2", "DejaVu Sans", 72)
+title = title.with_color("black").with_outline("white", 3)
+img.add(title, (50, 80))
 
 # Subtitle
-editor.add_text("Zero-dependency emoji rendering", 50, 150, "Sans", 36, "black")
+img.add_text("Zero-dependency emoji rendering", 50, 150, font_size=36, color="black")
 
-# Features
-editor.add_text("✅ Fast", 50, 220, "Sans", 28, "black")
-editor.add_text("✅ Simple", 50, 270, "Sans", 28, "black")
-editor.add_text("✅ Cross-platform", 50, 320, "Sans", 28, "black")
+# Features in a box
+box = TextBox("✅ Fast & Simple", "DejaVu Sans", 28)
+box = box.with_background("lightblue", 10).with_border("blue", 2)
+img.add(box, (50, 220))
 
-editor.save("demo.png")
+img.save("demo.png")
+```
+
+### Loading from Other Libraries
+```python
+from pyemoji2 import Image
+from PIL import Image as PILImage
+import imgrs
+
+# From PIL
+pil_img = PILImage.open("photo.jpg")
+img = Image.from_pil(pil_img)
+
+# From imgrs
+imgrs_img = imgrs.Image.open("photo.png")
+img = Image.from_imgrs(imgrs_img)
+
+# Add text and save
+img.add_text("Converted!", 50, 50, font_size=40, color="red")
+img.save("converted.png")
 ```
 
 ### API Reference
 
-#### `EmojiEditor.create_empty(width, height)`
-Create a blank ARGB32 image.
+#### Image Class
 
-**Parameters:**
-- `width` (int): Image width in pixels
-- `height` (int): Image height in pixels
+**Class Methods:**
+- `Image.load(path)` - Load image from file
+- `Image.open(path)` - Alias for load()
+- `Image.create_empty(width, height)` - Create blank image
+- `Image.from_pil(pil_image)` - Convert from PIL Image
+- `Image.from_imgrs(imgrs_image)` - Convert from imgrs Image
 
-**Returns:** `EmojiEditor` instance
+**Instance Methods:**
+- `add(text_obj, position)` - Add Text/TextBox object
+- `add_text(text, x, y, font_family="DejaVu Sans", font_size=20.0, color="black")` - Add simple text
+- `save(output_path)` - Save as PNG
 
-#### `editor.add_text(text, x, y, font_family, font_size, color)`
-Add text to the image.
+#### Text Class
 
-**Parameters:**
-- `text` (str): Text to render (supports emojis)
-- `x` (float): X coordinate (top-left)
-- `y` (float): Y coordinate (top-left)
-- `font_family` (str): Font name (e.g., "Sans", "Serif", "Monospace")
-- `font_size` (float): Font size in points
-- `color` (str): Color name ("black", "red", etc.)
+```python
+Text(text, font="DejaVu Sans", size=24)
+```
 
-#### `editor.save(output_path)`
-Save the image as PNG.
+**Methods:**
+- `with_color(color)` - Set text color
+- `with_outline(color, width=2)` - Add outline
+- `with_gradient(color1, color2, vertical=False)` - Add gradient
+- `with_shadow(offset_x=2, offset_y=2, color="gray", opacity=0.5)` - Add shadow
 
-**Parameters:**
-- `output_path` (str): Output file path
+#### TextBox Class
+
+```python
+TextBox(text, font="DejaVu Sans", size=24)
+```
+
+**Additional Methods:**
+- `with_background(color, padding=10)` - Set background
+- `with_border(color, width=2)` - Set border
 
 ## 🏗️ Development
 
@@ -136,9 +174,11 @@ Save the image as PNG.
 python setup.py build_ext --inplace
 ```
 
-### Run Tests
+### Run Examples
 ```bash
-python test_pyemoji2.py
+cd examples
+python basic_usage.py
+python advanced_styling.py
 ```
 
 ## 📊 Performance
