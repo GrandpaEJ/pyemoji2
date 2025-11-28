@@ -97,22 +97,25 @@ void emoji_img_add_text_outlined(EmojiImageManipulator* manip, const char* text,
 
     PangoLayout *layout = pango_cairo_create_layout(manip->cr);
     pango_layout_set_text(layout, text, -1);
-    
+
     PangoFontDescription *desc = pango_font_description_from_string(font_family);
     pango_font_description_set_size(desc, font_size * PANGO_SCALE);
     pango_layout_set_font_description(layout, desc);
 
-    cairo_move_to(manip->cr, x, y);
-    
-    // Draw outline
+    // Draw outline by drawing text multiple times with offsets
     cairo_set_source_rgb(manip->cr, or, og, ob);
-    cairo_set_line_width(manip->cr, outline_width);
-    pango_cairo_layout_path(manip->cr, layout);
-    cairo_stroke_preserve(manip->cr);
-    
-    // Fill text
+    for (int dx = -1; dx <= 1; dx++) {
+        for (int dy = -1; dy <= 1; dy++) {
+            if (dx == 0 && dy == 0) continue; // Skip center
+            cairo_move_to(manip->cr, x + dx * outline_width, y + dy * outline_width);
+            pango_cairo_show_layout(manip->cr, layout);
+        }
+    }
+
+    // Draw fill text
     cairo_set_source_rgb(manip->cr, fr, fg, fb);
-    cairo_fill(manip->cr);
+    cairo_move_to(manip->cr, x, y);
+    pango_cairo_show_layout(manip->cr, layout);
 
     g_object_unref(layout);
     pango_font_description_free(desc);
