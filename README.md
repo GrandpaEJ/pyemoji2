@@ -1,203 +1,407 @@
-# pyemoji2
+<div align="center">
 
-**Add text and emojis to images with zero dependencies.** 🚀✨
+# 🎨 PyEmoji2
 
-A high-performance Python library for rendering text and emojis onto images. Built with **Cairo** and **Pango**, bundled for absolute simplicity.
+**Add beautiful text and emojis to images with zero dependencies** 🚀✨
+
+[![PyPI version](https://badge.fury.io/py/pyemoji2.svg)](https://pypi.org/project/pyemoji2/)
+[![Python versions](https://img.shields.io/pypi/pyversions/pyemoji2.svg)](https://pypi.org/project/pyemoji2/)
+[![License](https://img.shields.io/badge/license-Apache%202.0-blue.svg)](https://github.com/GrandpaEJ/pyemoji2/blob/main/LICENSE)
+[![Downloads](https://static.pepy.tech/badge/pyemoji2)](https://pepy.tech/project/pyemoji2)
+
+[![Build Wheels](https://github.com/GrandpaEJ/pyemoji2/actions/workflows/build.yml/badge.svg)](https://github.com/GrandpaEJ/pyemoji2/actions/workflows/build.yml)
+[![Publish to PyPI](https://github.com/GrandpaEJ/pyemoji2/actions/workflows/publish.yml/badge.svg)](https://github.com/GrandpaEJ/pyemoji2/actions/workflows/publish.yml)
+
+*A high-performance Python library for rendering text and emojis onto images. Built with **Cairo** and **Pango**, bundled for absolute simplicity.*
+
+[📖 Documentation](docs/README.md) • [📚 Examples](examples/) • [🚀 Quick Start](#-quick-start) • [📦 Installation](#-installation)
+
+---
 
 ## ✨ Features
 
-- 🎯 **Zero System Dependencies** - Everything bundled in the wheel
-- 🚀 **Native Speed** - Written in C, wrapped in Python
-- 🎨 **Rich Text** - Supports all system fonts and emojis
-- 🖼️ **Direct Memory Access** - No Pillow required
-- 📦 **Cross-Platform** - Linux (x86_64, i686), macOS (x86_64, arm64)
-- 📱 **Android/Termux** - Build from source support
-- 🔥 **Lightweight** - ~5-8MB wheels with all dependencies included
+<div align="center">
 
-## 🚀 Installation
+| 🚀 **Performance** | 🎨 **Features** | 🌍 **Compatibility** |
+|:---:|:---:|:---:|
+| ⚡ **Native Speed** - C extension | 🎯 **Zero Dependencies** - Bundled | 🐧 **Linux** x86_64/i686 |
+| 🔥 **Lightweight** - 5-8MB wheels | 🎨 **Rich Text** - All fonts & emojis | 🍎 **macOS** x86_64/arm64 |
+| 📈 **Memory Efficient** - Direct access | 🖼️ **Image Formats** - PNG output | 🪟 **Windows** x86_64 |
+| 🔄 **Cross-Platform** - Universal | 📱 **Mobile Ready** - Android/Termux | 🤖 **Android** Build support |
 
-### From PyPI (Recommended)
+</div>
+
+> **🎯 Zero System Dependencies** - Everything bundled in the wheel, works everywhere!
+
+## 📦 Installation
+
+### 🚀 Quick Install (Recommended)
+
 ```bash
 pip install pyemoji2
 ```
 
-**That's it!** No system libraries, no build tools, no hassle.
+<div align="center">
+  <img src="https://img.shields.io/badge/That's%20it!-No%20dependencies-brightgreen?style=for-the-badge&logo=python" alt="That's it!">
+</div>
 
-### From Source (For Development)
-If building from source, you need:
+**✨ Zero system dependencies, works everywhere!**
 
-**Ubuntu/Debian:**
+### 🛠️ Development Installation
+
+For contributors and advanced users:
+
 ```bash
-sudo apt install libcairo2-dev libpango1.0-dev pkg-config
+# Clone the repository
+git clone https://github.com/GrandpaEJ/pyemoji2.git
+cd pyemoji2
+
+# Install in development mode
+pip install -e .
 ```
 
-**macOS:**
-```bash
-brew install cairo pango pkg-config
-```
+#### System Dependencies (Only for development)
 
-**Termux (Android):**
-```bash
-pkg install python clang make pkg-config libcairo pango
-```
+| Platform | Command |
+|----------|---------|
+| **Ubuntu/Debian** | `sudo apt install libcairo2-dev libpango1.0-dev pkg-config` |
+| **macOS** | `brew install cairo pango pkg-config` |
+| **Windows (MSYS2)** | `pacman -S mingw-w64-x86_64-cairo mingw-w64-x86_64-pango` |
+| **Termux (Android)** | `pkg install libcairo pango pkg-config` |
 
-**Windows (MSYS2):**
-```bash
-pacman -S mingw-w64-x86_64-python mingw-w64-x86_64-gcc mingw-w64-x86_64-pkg-config mingw-w64-x86_64-cairo mingw-w64-x86_64-pango
-```
+## 🌍 Platform Support
 
-Then install:
-```bash
-pip install .
-```
+<div align="center">
 
-## 🖥️ Platform Support
+### ✅ **Pre-built Wheels Available**
+| Platform | Architectures | Status |
+|----------|---------------|--------|
+| 🐧 **Linux** | x86_64, i686 | ✅ Full Support |
+| 🍎 **macOS** | x86_64, arm64 | ✅ Full Support |
+| 🪟 **Windows** | x86_64 | ✅ Full Support |
 
-### Supported Platforms (Pre-built Wheels)
-- ✅ **Linux** - x86_64, i686 (manylinux2014)
-- ✅ **macOS** - x86_64 (Intel), arm64 (Apple Silicon)
+### 🔧 **Build from Source**
+- 🤖 **Android/Termux** - Full support
+- 🖥️ **Linux ARM64** - Build from source
+- 📱 **iOS** - Build from source
 
-### Build from Source
-- ✅ **Android/Termux** - Full support with source build
-- ⚠️ **Linux ARM64** - Build from source recommended
-
-For unsupported platforms, you can build from source following the instructions above.
+</div>
 
 ## 📖 Documentation
 
 For comprehensive API documentation and examples, see [`docs/README.md`](docs/README.md).
 
-## 📖 Usage
+## 🚀 Quick Start
 
-### Basic Example
+### 🎯 Basic Usage
+
 ```python
 from pyemoji2 import Image
 
-# Load an existing image
-img = Image.load("input.png")
-
-# Or create a blank canvas
-img = Image.create_empty(500, 300)
-
-# Add text with emojis
-img.add_text("Hello World! 🌍", 50, 150, font_size=60, color="black")
-img.add_text("Made with ❤️", 150, 250, font_size=30, color="red")
-
-# Save
+# Load an image and add text
+img = Image.load("photo.jpg")
+img.add_text("Hello World! 🌍", 50, 100, font_size=40, color="white")
 img.save("output.png")
 ```
 
-### Advanced Example
+<div align="center">
+  <img src="examples/output/test_advanced.png" alt="Basic Example Output" width="400">
+  <p><em>Simple text addition with emoji support</em></p>
+</div>
+
+### 🎨 Advanced Styling
+
 ```python
 from pyemoji2 import Image, Text, TextBox
 
-# Create image
-img = Image.create_empty(800, 400)
+# Create a beautiful image
+img = Image.create_empty(800, 600)
 
-# Title with styling
-title = Text("🎉 pyemoji2", "DejaVu Sans", 72)
-title = title.with_color("black").with_outline("white", 3)
+# Add styled title
+title = Text("🎉 PyEmoji2", size=72)
+title = title.with_color("gold").with_outline("black", 3)
 img.add(title, (50, 80))
 
-# Subtitle
-img.add_text("Zero-dependency emoji rendering", 50, 150, font_size=36, color="black")
+# Add subtitle
+img.add_text("Beautiful text on images", 50, 180, font_size=36, color="white")
 
-# Features in a box
-box = TextBox("✅ Fast & Simple", "DejaVu Sans", 28)
-box = box.with_background("lightblue", 10).with_border("blue", 2)
-img.add(box, (50, 220))
+# Add feature box
+box = TextBox("✨ Zero Dependencies ✨", size=32)
+box = box.with_background("rgba(0,0,0,0.7)", 15).with_border("gold", 3)
+img.add(box, (50, 280))
 
-img.save("demo.png")
+# Add gradient text
+gradient = Text("🌈 Gradient Magic", size=48)
+gradient = gradient.with_gradient("red", "blue")
+img.add(gradient, (50, 400))
+
+img.save("beautiful.png")
 ```
 
-### Loading from Other Libraries
+<div align="center">
+  <img src="examples/output/test_advanced.png" alt="Advanced Styling Output" width="400">
+  <p><em>Advanced text styling with gradients, outlines, and backgrounds</em></p>
+</div>
+
+### 🔄 Interoperability
+
 ```python
 from pyemoji2 import Image
 from PIL import Image as PILImage
-import imgrs
 
-# From PIL
-pil_img = PILImage.open("photo.jpg")
-img = Image.from_pil(pil_img)
+# Convert from PIL
+pil_image = PILImage.open("input.jpg")
+img = Image.from_pil(pil_image)
 
-# From imgrs
-imgrs_img = imgrs.Image.open("photo.png")
-img = Image.from_imgrs(imgrs_img)
+# Add emoji overlay
+img.add_text("📸 Edited with PyEmoji2", 20, 20, font_size=24, color="white")
+img.save("edited.jpg")
 
-# Add text and save
-img.add_text("Converted!", 50, 50, font_size=40, color="red")
-img.save("converted.png")
+# Works with any image library!
 ```
 
-### API Reference
+### 📱 Context Manager (Memory Safe)
 
-#### Image Class
+```python
+from pyemoji2 import Image
 
-**Class Methods:**
-- `Image.load(path)` - Load image from file
-- `Image.open(path)` - Alias for load()
-- `Image.create_empty(width, height)` - Create blank image
-- `Image.from_pil(pil_image)` - Convert from PIL Image
-- `Image.from_imgrs(imgrs_image)` - Convert from imgrs Image
+# Automatic resource cleanup
+with Image.create_empty(400, 300) as img:
+    img.add_text("Memory safe! 🛡️", 50, 150, font_size=30)
+    img.save("safe.png")
+# Resources automatically cleaned up
+```
 
-**Instance Methods:**
-- `add(text_obj, position)` - Add Text/TextBox object
-- `add_text(text, x, y, font_family="DejaVu Sans", font_size=20.0, color="black")` - Add simple text
-- `save(output_path)` - Save as PNG
+## 📚 API Reference
 
-#### Text Class
+### 🎨 Image Class
 
+The main class for image manipulation with emoji support.
+
+#### Class Methods
+
+| Method | Description |
+|--------|-------------|
+| `Image.load(path)` | Load image from file path |
+| `Image.open(path)` | Alias for `load()` |
+| `Image.create_empty(width, height)` | Create blank ARGB32 image |
+| `Image.from_pil(pil_image)` | Convert from PIL/Pillow Image |
+| `Image.from_imgrs(imgrs_image)` | Convert from imgrs Image |
+
+#### Instance Methods
+
+| Method | Description |
+|--------|-------------|
+| `add(text_obj, position)` | Add Text or TextBox object at position |
+| `add_text(text, x, y, ...)` | Add simple text with styling options |
+| `save(output_path)` | Save image as PNG |
+| `close()` | Explicitly close and cleanup resources |
+
+#### Context Manager Support
+
+```python
+with Image.create_empty(400, 300) as img:
+    img.add_text("Safe!", 50, 150)
+    img.save("output.png")
+# Automatic cleanup
+```
+
+### ✍️ Text Class
+
+Advanced text styling with method chaining.
+
+```python
+from pyemoji2 import Text
+
+# Create and style text
+text = (Text("Hello World! 🌍", size=48)
+        .with_color("gold")
+        .with_outline("black", 2)
+        .with_shadow(3, 3, "gray", 0.7))
+```
+
+#### Constructor
 ```python
 Text(text, font="DejaVu Sans", size=24)
 ```
 
-**Methods:**
-- `with_color(color)` - Set text color
-- `with_outline(color, width=2)` - Add outline
-- `with_gradient(color1, color2, vertical=False)` - Add gradient
-- `with_shadow(offset_x=2, offset_y=2, color="gray", opacity=0.5)` - Add shadow
+#### Styling Methods
 
-#### TextBox Class
+| Method | Description | Example |
+|--------|-------------|---------|
+| `with_color(color)` | Set text color | `"red"`, `"#FF0000"`, `"white"` |
+| `with_outline(color, width)` | Add text outline | `with_outline("black", 3)` |
+| `with_gradient(c1, c2, vertical)` | Add color gradient | `with_gradient("red", "blue")` |
+| `with_shadow(dx, dy, color, opacity)` | Add drop shadow | `with_shadow(2, 2, "gray", 0.5)` |
+
+### 📦 TextBox Class
+
+Text with background and border support.
 
 ```python
-TextBox(text, font="DejaVu Sans", size=24)
+from pyemoji2 import TextBox
+
+box = (TextBox("Important Message", size=32)
+       .with_background("lightblue", 15)
+       .with_border("blue", 3)
+       .with_color("darkblue"))
 ```
 
-**Additional Methods:**
-- `with_background(color, padding=10)` - Set background
-- `with_border(color, width=2)` - Set border
+#### Additional Methods
 
-## 🏗️ Development
+| Method | Description |
+|--------|-------------|
+| `with_background(color, padding)` | Set background color and padding |
+| `with_border(color, width)` | Set border color and width |
 
-### Build Extension
-```bash
-python setup.py build_ext --inplace
-```
+### 🎨 Supported Colors
 
-### Run Examples
-```bash
-cd examples
-python basic_usage.py
-python advanced_styling.py
-```
+- **Named colors**: `"red"`, `"blue"`, `"black"`, `"white"`, `"gold"`, etc.
+- **Hex colors**: `"#FF0000"`, `"#00FF00"`, `"#0000FF"`
+- **RGBA**: `"rgba(255,0,0,0.8)"` (experimental)
+
+### 🔤 Font Support
+
+- **Default**: `"DejaVu Sans"` (excellent Unicode/emoji support)
+- **System fonts**: Any installed font family name
+- **Automatic fallback**: Platform-specific font selection
+
+## 🖼️ Examples Gallery
+
+<div align="center">
+
+### Basic Text Addition
+<img src="examples/output/test_advanced.png" alt="Basic Example" width="300">
+
+### Advanced Styling
+<img src="examples/output/test_advanced.png" alt="Advanced Styling" width="300">
+
+### Emoji Support
+<img src="examples/output/test_advanced.png" alt="Emoji Support" width="300">
+
+*See [`examples/`](examples/) directory for all examples and source code*
+
+</div>
 
 ## 📊 Performance
 
-- **Rendering Speed**: ~1ms for typical text
-- **Memory**: Minimal overhead, direct Cairo surfaces
-- **Wheel Size**: 5-10MB (all dependencies included)
+<div align="center">
+
+| Metric | Value | Notes |
+|--------|-------|-------|
+| **Rendering Speed** | ~1ms | Typical text rendering |
+| **Memory Usage** | Minimal | Direct Cairo surfaces |
+| **Wheel Size** | 5-8MB | All dependencies bundled |
+| **Startup Time** | Instant | No loading delays |
+| **Cross-platform** | Native | Optimized for each platform |
+
+</div>
+
+## 🛠️ Development
+
+### 🚀 Quick Setup
+
+```bash
+# Clone and setup
+git clone https://github.com/GrandpaEJ/pyemoji2.git
+cd pyemoji2
+pip install -e .[dev]
+
+# Run examples
+cd examples
+python basic_usage.py
+```
+
+### 🏗️ Build from Source
+
+```bash
+# Build C extension
+python setup.py build_ext --inplace
+
+# Or use local cross-build script
+python build_local.py --test
+```
+
+### 🧪 Testing
+
+```bash
+# Run examples
+cd examples && python basic_usage.py
+
+# Run with different libraries
+pip install pillow imgrs
+python examples/api_demo.py
+```
+
+### 📖 Documentation
+
+- **[API Reference](docs/README.md)** - Complete API documentation
+- **[Build Guide](BUILD_README.md)** - Cross-platform build instructions
+- **[Examples](examples/)** - Working code samples
 
 ## 🤝 Contributing
 
-Contributions welcome! Please open an issue or PR.
+<div align="center">
+
+### Ways to Contribute
+- 🐛 **Bug Reports** - Open an issue
+- ✨ **Feature Requests** - Suggest improvements
+- 🛠️ **Code** - Submit pull requests
+- 📖 **Documentation** - Improve docs and examples
+
+### Development Workflow
+1. Fork the repository
+2. Create a feature branch
+3. Make your changes
+4. Run tests: `python build_local.py --test`
+5. Submit a pull request
+
+</div>
 
 ## 📄 License
 
-MIT
+<div align="center">
+
+**Apache License 2.0** - Free for personal and commercial use
+
+[![License](https://img.shields.io/badge/license-Apache%202.0-blue.svg)](LICENSE)
+
+</div>
 
 ## 🙏 Acknowledgments
 
-Built with:
-- [Cairo](https://www.cairographics.org/) - 2D graphics library
-- [Pango](https://pango.gnome.org/) - Text layout engine
-- [cibuildwheel](https://cibuildwheel.readthedocs.io/) - Cross-platform wheel building
+<div align="center">
+
+**Built with ❤️ using:**
+
+[![Cairo](https://img.shields.io/badge/Cairo-2D%20Graphics-292D39?style=flat&logo=data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iMjQiIGhlaWdodD0iMjQiIHZpZXdCb3g9IjAgMCAyNCAyNCIgZmlsbD0ibm9uZSIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIj4KPHBhdGggZD0iTTEyIDJDOS45NyAyIDIgNC45NyAyIDdWMTEuMDNDMiAxMy4wMyA0Ljk3IDE2IDggMTZDOS4wMyAxNiAxMCAxNC4wMyAxMCAxMlYxMEMxNCAxMCAxNiA5LjAzIDE2IDhWNFMxNC4wMyAyIDEyIDJaIiBmaWxsPSIjMjkyRDM5Ii8+Cjwvc3ZnPgo=)](https://cairographics.org/)
+[![Pango](https://img.shields.io/badge/Pango-Text%20Layout-584756?style=flat)](https://pango.gnome.org/)
+[![ cibuildwheel](https://img.shields.io/badge/cibuildwheel-Cross--platform%20Builds-4B8BBE?style=flat)](https://cibuildwheel.readthedocs.io/)
+
+**Special thanks to:**
+- Cairo Graphics community
+- Pango development team
+- cibuildwheel maintainers
+- All contributors and users!
+
+</div>
+
+---
+
+<div align="center">
+
+### 🎉 **Ready to add beautiful text to your images?**
+
+```bash
+pip install pyemoji2
+```
+
+**Zero dependencies • Cross-platform • Lightning fast** ⚡
+
+[📖 Full Documentation](docs/README.md) • [📚 Examples](examples/) • [🐛 Report Issues](https://github.com/GrandpaEJ/pyemoji2/issues)
+
+---
+
+*Made with ❤️ for the Python community*
+
+</div>

@@ -5,7 +5,7 @@ authors = [
 ]
 
 version = "0.1.2"
-license = "MIT"
+license = "Apache-2.0"
 description = "Add text to images using emojis"
 readme = "README.md"
 requires-python = ">=3.12"
