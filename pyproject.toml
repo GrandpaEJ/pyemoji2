@@ -20,7 +20,7 @@ pil = [
     "pillow>=10.0.0"
 ]
 imgrs = [
-    "imgrs>-0.3.0"
+    "imgrs>=0.3.0"
 ]
 
 [build-system]
