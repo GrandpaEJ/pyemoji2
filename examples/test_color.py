@@ -5,9 +5,10 @@ Test color preservation from PIL and imgrs.
 
 import sys
 import os
+
 sys.path.insert(0, os.path.dirname(os.getcwd()))
 
-from pyemoji2 import Image, Text
+from pyemoji2 import Image
 
 # Create a test image with colored emoji
 img = Image.create_empty(200, 100)
@@ -24,6 +25,7 @@ print("Created loaded_emoji.png")
 # Test with PIL
 try:
     from PIL import Image as PILImage
+
     pil_img = PILImage.open("original_emoji.png")
     img_from_pil = Image.from_pil(pil_img)
     img_from_pil.add_text("From PIL", 10, 80, font_size=20, color="blue")
@@ -35,6 +37,7 @@ except Exception as e:
 # Test with imgrs
 try:
     import imgrs
+
     imgrs_img = imgrs.Image.open("original_emoji.png")
     img_from_imgrs = Image.from_imgrs(imgrs_img)
     img_from_imgrs.add_text("From imgrs", 10, 80, font_size=20, color="green")
